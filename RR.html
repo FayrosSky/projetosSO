@@ -56,7 +56,7 @@
                 let ingresso = inputs[0].value
                 let Duração = inputs[1].value
 
-                tarefas.push({ ing: ingresso, dur: Duração }) // estamos criando um objeto com {}, e dentro do objeto podemos podemos definir quais os atributos(no caso ing e dur) desse objeto irão ser criados
+                tarefas.push({ ing: ingresso, dur: Duração, dur2: Duração }) // estamos criando um objeto com {}, e dentro do objeto podemos podemos definir quais os atributos(no caso ing e dur) desse objeto irão ser criados
 
 
 
@@ -80,7 +80,7 @@
 
         }
 
-        function mostrar_RR(output, qtd_tarefas) {
+        function mostrar_RR(output, qtd_tarefas, tempo_vida_medio, tempo_espera_medio) {
             let mostrar = document.getElementById("output")
             let tempos = ''
             var arr = Array(qtd_tarefas).fill(``); //var arr = Array(arraySize).fill(value) criando um array de strings vazias
@@ -114,7 +114,11 @@
                 <tbody>
                     ${arr.map(x => `<tr>`+x+`</tr>`).join(``)} 
                 </tbody>    
-            </table>`
+            </table>
+            
+            <h4>Tempo de vida ${tempo_vida_medio}</h4>
+            <h4>Tempo de espera ${tempo_espera}</h4>`
+            
         }
 
 
@@ -145,6 +149,8 @@
             let tempo = 0
 
             let output = []  //Definindo o array de output
+            let total_tempo_vida = 0
+            let tempo_espera = 0 
 
             while (true) {
                 //Calcula quanto tempo a gente vai executar a próxima tarefa
@@ -165,6 +171,12 @@
 
                 if (input[variavel_removida].dur != 0) {
                     list.push(variavel_removida)
+                }else{
+                    const tempo_vida = fim - input[variavel_removida].ing
+                    const tempo_espera = tempo_vida - input[variavel_removida].dur2
+                    
+                    total_tempo_vida += tempo_vida
+                    total_tempo_espera += tempo_espera
                 }
 
                 indices_tarefas_ingressaram = []
@@ -186,10 +198,11 @@
 
             }
             console.log(output)
-
             const qtd_tarefas = input.length
-
-            mostrar_RR(output, qtd_tarefas)
+            const tempo_vida_medio = (total_tempo_vida /qtd_tarefas)
+            const tempo_espera_medio = (total_tempo_espera /qtd_tarefas)
+            
+            mostrar_RR(output, qtd_tarefas, tempo_vida_medio, tempo_espera_medio)
 
         }
 
